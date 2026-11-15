@@ -2,6 +2,7 @@ package dev.apogee.sandevistan.client;
 
 import dev.apogee.sandevistan.ApogeeMod;
 import dev.apogee.sandevistan.ApogeeParticles;
+import dev.apogee.sandevistan.ApogeeScreenHandlers;
 import dev.apogee.sandevistan.network.ApogeeNetworking;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -13,6 +14,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.text.Text;
@@ -24,6 +26,7 @@ import org.lwjgl.glfw.GLFW;
 public class ApogeeClient implements ClientModInitializer {
     public static KeyBinding activateKey;
     public static KeyBinding cycleFxKey;
+    public static KeyBinding openImplantKey;
 
     private static final float[] INTENSITY_STEPS = {0.0f, 0.35f, 0.65f, 1.0f};
 
@@ -37,6 +40,12 @@ public class ApogeeClient implements ClientModInitializer {
         cycleFxKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 "key.sandevistan_apogee.cycle_fx", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN,
                 "key.categories.sandevistan_apogee"));
+        openImplantKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+                "key.sandevistan_apogee.open", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_C,
+                "key.categories.sandevistan_apogee"));
+
+        // The screen handler type is vanilla-registered (ApogeeScreenHandlers); the screen itself is client-only.
+        HandledScreens.register(ApogeeScreenHandlers.CYBERWARE, CyberwareScreen::new);
 
         ParticleFactoryRegistry.getInstance().register(ApogeeParticles.SPARK, ApogeeSparkParticle.Factory::new);
 
@@ -69,6 +78,17 @@ public class ApogeeClient implements ClientModInitializer {
         ApogeeWorldFx.reset();
     }
 
+    /** Asks the server to open the neuroimplant screen. Safe to call from the inventory-screen button too. */
+    public static void requestOpenImplant() {
+        MinecraftClient client = MinecraftClient.getInstance();
+        if (ClientPlayNetworking.canSend(ApogeeNetworking.OPEN_IMPLANT)) {
+            // Empty request: the server decides whether the player may open it.
+            ClientPlayNetworking.send(ApogeeNetworking.OPEN_IMPLANT, PacketByteBufs.empty());
+        } else if (client.player != null) {
+            client.player.sendMessage(Text.translatable("message.sandevistan_apogee.no_server"), true);
+        }
+    }
+
     private static void handleKeys(MinecraftClient client) {
         while (activateKey.wasPressed()) {
             if (client.player == null || client.currentScreen != null) {
@@ -80,6 +100,12 @@ public class ApogeeClient implements ClientModInitializer {
             } else {
                 client.player.sendMessage(Text.translatable("message.sandevistan_apogee.no_server"), true);
             }
+        }
+        while (openImplantKey.wasPressed()) {
+            if (client.player == null || client.currentScreen != null) {
+                continue;
+            }
+            requestOpenImplant();
         }
         while (cycleFxKey.wasPressed()) {
             ClientConfig cfg = ClientConfig.get();

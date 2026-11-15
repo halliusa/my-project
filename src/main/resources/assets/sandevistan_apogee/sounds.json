@@ -2,25 +2,45 @@
   "sandevistan.activate": {
     "subtitle": "subtitles.sandevistan_apogee.activate",
     "sounds": [
-      "sandevistan_apogee:sandevistan/activate"
+      {
+        "name": "minecraft:block.beacon.activate",
+        "type": "event",
+        "volume": 0.9,
+        "pitch": 1.35
+      }
     ]
   },
   "sandevistan.loop": {
     "subtitle": "subtitles.sandevistan_apogee.loop",
     "sounds": [
-      { "name": "minecraft:block.conduit.ambient.short", "type": "event", "volume": 0.55, "pitch": 1.6 }
+      {
+        "name": "minecraft:block.conduit.ambient.short",
+        "type": "event",
+        "volume": 0.55,
+        "pitch": 1.6
+      }
     ]
   },
   "sandevistan.deactivate": {
     "subtitle": "subtitles.sandevistan_apogee.deactivate",
     "sounds": [
-      "sandevistan_apogee:sandevistan/deactivate"
+      {
+        "name": "minecraft:block.beacon.deactivate",
+        "type": "event",
+        "volume": 0.8,
+        "pitch": 1.25
+      }
     ]
   },
   "sandevistan.ready": {
     "subtitle": "subtitles.sandevistan_apogee.ready",
     "sounds": [
-      { "name": "minecraft:block.note_block.pling", "type": "event", "volume": 0.6, "pitch": 1.7 }
+      {
+        "name": "minecraft:block.note_block.pling",
+        "type": "event",
+        "volume": 0.6,
+        "pitch": 1.7
+      }
     ]
   }
 }

@@ -12,7 +12,7 @@ import java.util.function.BiConsumer;
 
 /**
  * /apogeefx intensity [0..1]
- * /apogeefx shake|fov|flash|overlay|afterimages|arcs|particles|hud [true|false]
+ * /apogeefx shake|fov|flash|overlay|tint|lowtime|afterimages|arcs|particles|hud [true|false]
  * Client-side only; values are saved to config/sandevistan_apogee_client.json.
  */
 public final class ApogeeClientCommands {
@@ -37,6 +37,8 @@ public final class ApogeeClientCommands {
             root.then(toggle("fov", (c, v) -> c.cameraFov = v));
             root.then(toggle("flash", (c, v) -> c.screenFlash = v));
             root.then(toggle("overlay", (c, v) -> c.screenOverlay = v));
+            root.then(toggle("tint", (c, v) -> c.screenTint = v));
+            root.then(toggle("lowtime", (c, v) -> c.lowTime = v));
             root.then(toggle("afterimages", (c, v) -> c.afterimages = v));
             root.then(toggle("arcs", (c, v) -> c.arcs = v));
             root.then(toggle("particles", (c, v) -> c.particles = v));

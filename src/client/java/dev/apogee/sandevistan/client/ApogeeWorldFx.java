@@ -19,9 +19,9 @@ import net.minecraft.client.render.VertexFormat;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.render.entity.EntityRenderer;
-import net.minecraft.client.render.entity.PlayerEntityRenderer;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
-import net.minecraft.client.render.entity.model.PlayerEntityModel;
+import net.minecraft.client.render.entity.model.EntityModel;
+import dev.apogee.sandevistan.client.mixin.LivingEntityRendererAccessor;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
@@ -416,10 +416,13 @@ public final class ApogeeWorldFx {
                 continue;
             }
             EntityRenderer<?> renderer = dispatcher.getRenderer(player);
-            if (!(renderer instanceof PlayerEntityRenderer playerRenderer)) {
-                continue;
+            if (!(renderer instanceof LivingEntityRendererAccessor accessor)) {
+                continue; // mixin not applied: afterimages unavailable, no crash
             }
-            PlayerEntityModel<AbstractClientPlayerEntity> model = playerRenderer.getModel();
+            EntityModel<?> rawModel = accessor.sandevistanApogee$getModel();
+            if (!(rawModel instanceof BipedEntityModel<?> model)) {
+                continue; // non-biped player model (unlikely): skip rather than crash
+            }
             VertexConsumer consumer = immediate.getBuffer(layer);
 
             for (Snapshot s : entry.getValue()) {

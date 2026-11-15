@@ -3,7 +3,7 @@
   "id": "sandevistan_apogee",
   "version": "${version}",
   "name": "Sandevistan: Apogee",
-  "description": "Cyberware implant inspired by Cyberpunk: Edgerunners. Hold it in your inventory, press V and bend time around you.",
+  "description": "Cyberware implant inspired by Cyberpunk: Edgerunners. Install it into the dedicated neuroimplant slot (key C), press V and bend time around you.",
   "authors": [
     "Apogee Team"
   ],

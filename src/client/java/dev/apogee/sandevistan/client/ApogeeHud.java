@@ -69,6 +69,7 @@ public final class ApogeeHud {
     private static final int CYAN = 0x2BD9FF;
     private static final int READY = 0x7DFFE0;
     private static final int GREY = 0x6B6F80;
+    private static final int LOW = 0xFF3B30;
 
     // cut-in palette
     private static final int NEON = 0x39FF88;
@@ -966,9 +967,15 @@ public final class ApogeeHud {
         int h = g.getScaledWindowHeight();
         float blend = ApogeeFx.blend(td);
 
+        if (cfg.screenTint && blend > 0.01f) {
+            renderTint(g, w, h, blend * intensity);
+        }
         if (cfg.screenOverlay && blend > 0.01f) {
             renderVignette(g, w, h, blend * intensity);
             renderSpeedLines(g, w, h, ApogeeFx.speedLines(td) * blend * intensity);
+        }
+        if (cfg.lowTime) {
+            renderLowTimeWarning(g, w, h, intensity);
         }
         if (cfg.screenFlash) {
             float flash = ApogeeFx.flash(td);
@@ -976,6 +983,60 @@ public final class ApogeeHud {
                 int color = ApogeeFx.flashKind() == 0 ? 0xFFB070 : 0x60C8FF;
                 g.fill(0, 0, w, h, argb(color, flash * 0.30f * intensity));
             }
+        }
+    }
+
+    /**
+     * Subtle green wash + slow scanlines + one slow highlight band drifting down the screen,
+     * like looking through the implant's visor feed. Deliberately calm: no per-frame noise.
+     */
+    private static void renderTint(DrawContext g, int w, int h, float strength) {
+        g.fill(0, 0, w, h, argb(0x122E24, 0.15f * strength));
+
+        int dark = argb(0x000000, 0.09f * strength);
+        for (int y = 0; y < h; y += 3) {
+            g.fill(0, y, w, y + 1, dark);
+        }
+
+        float cycle = (ApogeeFx.time() % 200) / 200.0f; // ~10 s period
+        float bandH = Math.max(24.0f, h / 6.0f);
+        float bandY = cycle * (h + 2.0f * bandH) - bandH;
+        int a = Math.round(bandY - bandH * 0.5f);
+        int b = Math.round(bandY);
+        int c = Math.round(bandY + bandH * 0.5f);
+        g.fillGradient(0, a, w, b, argb(CYAN, 0.0f), argb(CYAN, 0.085f * strength));
+        g.fillGradient(0, b, w, c, argb(CYAN, 0.085f * strength), argb(CYAN, 0.0f));
+    }
+
+    /**
+     * Last 1.5 s of the effect: red edges of the screen pulse with a heartbeat (slow sine, cubed),
+     * growing stronger as the implant runs dry. HUD timer switches to red too.
+     */
+    private static void renderLowTimeWarning(DrawContext g, int w, int h, float intensity) {
+        int active = ClientState.activeLeft;
+        if (active <= 0 || active > 30) {
+            return;
+        }
+        float urgency = 1.0f - active / 30.0f;
+        float beat = MathHelper.sin(ApogeeFx.time() * 0.55f);
+        beat = beat * beat * beat;
+        beat = Math.max(0.0f, beat);
+        float a = (0.10f + 0.30f * beat) * urgency * intensity;
+        if (a <= 0.01f) {
+            return;
+        }
+        int edgeH = Math.max(10, h / 7);
+        g.fillGradient(0, 0, w, edgeH, argb(LOW, a), argb(LOW, 0.0f));
+        g.fillGradient(0, h - edgeH, w, h, argb(LOW, 0.0f), argb(LOW, a));
+        int edgeW = Math.max(8, w / 11);
+        int steps = 6;
+        for (int i = 0; i < steps; i++) {
+            float k = 1.0f - (float) i / steps;
+            int x0 = i * edgeW / steps;
+            int x1 = (i + 1) * edgeW / steps;
+            int c = argb(LOW, a * k * k);
+            g.fill(x0, 0, x1, h, c);
+            g.fill(w - x1, 0, w - x0, h, c);
         }
     }
 
@@ -998,22 +1059,25 @@ public final class ApogeeHud {
         }
     }
 
+    /** Speed lines: short streaks that spawn near the centre and fly outwards, like wind rushing past. */
     private static void renderSpeedLines(DrawContext g, int w, int h, float strength) {
         if (strength < 0.02f) {
             return;
         }
-        int count = Math.round(36 * Math.min(1.0f, strength * 1.3f));
+        int count = Math.round(40 * Math.min(1.0f, strength * 1.3f));
         float minDim = Math.min(w, h);
-        float time = ApogeeFx.time() * 0.05f;
+        float drift = ApogeeFx.time() * 0.024f; // outward travel speed
         g.getMatrices().push();
         g.getMatrices().translate(w / 2.0f, h / 2.0f, 0.0f);
         for (int i = 0; i < count; i++) {
-            float angle = i * (360.0f / 36.0f) + (i * 37 % 11);
-            float wobble = 0.5f + 0.5f * MathHelper.sin(time + i * 1.7f);
-            int r0 = (int) (minDim * (0.34f + 0.10f * ((i * 53) % 7) / 7.0f));
-            int len = (int) (minDim * (0.08f + 0.14f * wobble));
+            float angle = i * (360.0f / 40.0f) + (i * 37 % 13);
+            float cycle = (drift + i * 0.618f) % 1.0f; // 0 = just spawned, 1 = gone
+            float radius = minDim * (0.26f + 0.44f * cycle);
+            int len = Math.max(4, Math.round(minDim * (0.14f - 0.10f * cycle)));
+            float fade = 1.0f - cycle;
             boolean warm = i % 4 == 0;
-            int color = argb(warm ? ORANGE : CYAN, 0.22f * strength * (0.5f + 0.5f * wobble));
+            int color = argb(warm ? ORANGE : CYAN, 0.20f * strength * fade);
+            int r0 = Math.round(radius);
             g.getMatrices().push();
             g.getMatrices().multiply(RotationAxis.POSITIVE_Z.rotationDegrees(angle));
             g.fill(r0, 0, r0 + len, 1, color);
@@ -1033,7 +1097,8 @@ public final class ApogeeHud {
         int x = anchor.endsWith("RIGHT") ? sw - w - cfg.hudOffsetX : cfg.hudOffsetX;
         int y = anchor.startsWith("BOTTOM") ? sh - h - cfg.hudOffsetY : cfg.hudOffsetY;
 
-        boolean has = hasImplant(mc.player);
+        boolean installed = ClientState.implantInstalled;
+        boolean inInventory = hasImplant(mc.player);
         int active = ClientState.activeLeft;
         int cooldown = ClientState.cooldownLeft;
 
@@ -1042,16 +1107,20 @@ public final class ApogeeHud {
         String timeText = "";
         float fill;
         float borderAlpha = 1.0f;
+        boolean lowTime = false;
 
         if (active > 0) {
             float left = Math.max(0.0f, active - td);
-            accent = ORANGE;
+            lowTime = left <= 30.0f;
+            accent = lowTime ? LOW : ORANGE;
             label = Text.translatable("hud.sandevistan_apogee.active");
             timeText = String.format(Locale.ROOT, "%.1fs", left / 20.0f);
             fill = left / Math.max(1, ClientState.activeTotal);
-        } else if (!has) {
+        } else if (!installed) {
             accent = GREY;
-            label = Text.translatable("hud.sandevistan_apogee.missing");
+            label = Text.translatable(inInventory
+                    ? "hud.sandevistan_apogee.not_installed"
+                    : "hud.sandevistan_apogee.missing");
             fill = 0.0f;
         } else if (cooldown > 0) {
             float left = Math.max(0.0f, cooldown - td);
@@ -1079,13 +1148,25 @@ public final class ApogeeHud {
         if (icon == null) {
             icon = new ItemStack(ApogeeItems.SANDEVISTAN);
         }
-        g.drawItem(icon, x + 4, y + 7);
+        if (!installed && ClientState.activeLeft <= 0) {
+            // Dimmed icon: the implant exists but is not installed in the neuroimplant slot.
+            RenderSystem.enableBlend();
+            RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 0.45f);
+            try {
+                g.drawItem(icon, x + 4, y + 7);
+            } finally {
+                RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+            }
+        } else {
+            g.drawItem(icon, x + 4, y + 7);
+        }
 
         int textColor = 0xFF000000 | accent;
         g.drawText(mc.textRenderer, label, x + 24, y + 5, textColor, true);
         if (!timeText.isEmpty()) {
             int tw = mc.textRenderer.getWidth(timeText);
-            g.drawText(mc.textRenderer, timeText, x + w - 5 - tw, y + 5, 0xFFFFFFFF, true);
+            int timeColor = lowTime ? 0xFFFF8A70 : 0xFFFFFFFF;
+            g.drawText(mc.textRenderer, timeText, x + w - 5 - tw, y + 5, timeColor, true);
         }
 
         int bx0 = x + 24;

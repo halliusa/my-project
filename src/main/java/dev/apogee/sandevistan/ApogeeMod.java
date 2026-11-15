@@ -1,6 +1,7 @@
 package dev.apogee.sandevistan;
 
 import dev.apogee.sandevistan.config.ApogeeConfig;
+import dev.apogee.sandevistan.implant.ImplantManager;
 import dev.apogee.sandevistan.logic.SandevistanManager;
 import dev.apogee.sandevistan.network.ApogeeNetworking;
 import net.fabricmc.api.ModInitializer;
@@ -28,8 +29,10 @@ public class ApogeeMod implements ModInitializer {
         ApogeeSounds.register();
         ApogeeParticles.register();
         ApogeeItems.register();
+        ApogeeScreenHandlers.register();
         ApogeeNetworking.registerServerReceivers();
         SandevistanManager.registerEvents();
+        ImplantManager.register();
 
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) ->
                 dispatcher.register(CommandManager.literal("sandevistan")
