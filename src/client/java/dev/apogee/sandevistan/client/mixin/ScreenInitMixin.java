@@ -2,7 +2,6 @@ package dev.apogee.sandevistan.client.mixin;
 
 import dev.apogee.sandevistan.client.ApogeeClient;
 import dev.apogee.sandevistan.client.ImplantButtonTracker;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -40,14 +39,13 @@ public class ScreenInitMixin {
     private void sandevistanApogee$addImplantButton(CallbackInfo ci) {
         try {
             HandledScreenAccessor panel = (HandledScreenAccessor) (Object) this;
-            Screen self = (Screen) (Object) this;
             int x = panel.sandevistanApogee$panelX() + BUTTON_X_OFFSET;
             int y = panel.sandevistanApogee$panelY() + BUTTON_Y_OFFSET;
             ButtonWidget button = ButtonWidget.builder(Text.empty(), btn -> ApogeeClient.requestOpenImplant())
                     .dimensions(x, y, BUTTON_SIZE, BUTTON_SIZE)
                     .tooltip(Tooltip.of(Text.translatable("gui.sandevistan_apogee.button")))
                     .build();
-            self.addDrawableChild(button);
+            ((ScreenAccessor) (Object) this).sandevistanApogee$addDrawableChild(button);
             ImplantButtonTracker.place(button);
         } catch (Throwable ignored) {
             // Never break the inventory screen over a decorative button.

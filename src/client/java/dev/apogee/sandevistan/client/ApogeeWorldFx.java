@@ -420,9 +420,13 @@ public final class ApogeeWorldFx {
                 continue; // mixin not applied: afterimages unavailable, no crash
             }
             EntityModel<?> rawModel = accessor.sandevistanApogee$getModel();
-            if (!(rawModel instanceof BipedEntityModel<?> model)) {
+            if (!(rawModel instanceof BipedEntityModel<?> biped)) {
                 continue; // non-biped player model (unlikely): skip rather than crash
             }
+            // Player renderers hold BipedEntityModel<AbstractClientPlayerEntity>; erase the wildcard to satisfy typing.
+            @SuppressWarnings("unchecked")
+            BipedEntityModel<AbstractClientPlayerEntity> model =
+                    (BipedEntityModel<AbstractClientPlayerEntity>) biped;
             VertexConsumer consumer = immediate.getBuffer(layer);
 
             for (Snapshot s : entry.getValue()) {

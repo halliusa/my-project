@@ -8,6 +8,7 @@
     "LivingEntityRendererAccessor",
     "CameraMixin",
     "GameRendererMixin",
+    "ScreenAccessor",
     "ScreenInitMixin",
     "HandledScreenForegroundMixin"
   ],
