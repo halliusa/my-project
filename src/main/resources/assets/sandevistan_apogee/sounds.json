@@ -1,0 +1,26 @@
+{
+  "sandevistan.activate": {
+    "subtitle": "subtitles.sandevistan_apogee.activate",
+    "sounds": [
+      "sandevistan_apogee:sandevistan/activate"
+    ]
+  },
+  "sandevistan.loop": {
+    "subtitle": "subtitles.sandevistan_apogee.loop",
+    "sounds": [
+      { "name": "minecraft:block.conduit.ambient.short", "type": "event", "volume": 0.55, "pitch": 1.6 }
+    ]
+  },
+  "sandevistan.deactivate": {
+    "subtitle": "subtitles.sandevistan_apogee.deactivate",
+    "sounds": [
+      "sandevistan_apogee:sandevistan/deactivate"
+    ]
+  },
+  "sandevistan.ready": {
+    "subtitle": "subtitles.sandevistan_apogee.ready",
+    "sounds": [
+      { "name": "minecraft:block.note_block.pling", "type": "event", "volume": 0.6, "pitch": 1.7 }
+    ]
+  }
+}

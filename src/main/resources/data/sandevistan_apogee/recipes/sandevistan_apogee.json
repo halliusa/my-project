@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "DRD",
+    "NCN",
+    "LEL"
+  ],
+  "key": {
+    "D": { "item": "minecraft:diamond" },
+    "R": { "item": "minecraft:redstone_block" },
+    "N": { "item": "minecraft:netherite_ingot" },
+    "C": { "item": "minecraft:clock" },
+    "L": { "item": "minecraft:lightning_rod" },
+    "E": { "item": "minecraft:ender_eye" }
+  },
+  "result": {
+    "item": "sandevistan_apogee:sandevistan_apogee",
+    "count": 1
+  }
+}
