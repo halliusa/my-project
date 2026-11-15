@@ -4,7 +4,7 @@ import dev.apogee.sandevistan.ApogeeItems;
 import dev.apogee.sandevistan.ApogeeMod;
 import dev.apogee.sandevistan.ApogeeSounds;
 import dev.apogee.sandevistan.network.ApogeeNetworking;
-import net.fabricmc.fabric.api.entity.event.v1.ServerPlayConnectionEvents;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.inventory.SimpleInventory;
@@ -24,7 +24,6 @@ import net.minecraft.util.WorldSavePath;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -208,7 +207,7 @@ public final class ImplantManager {
             }
             NbtCompound root = new NbtCompound();
             root.putInt("version", 1);
-            NbtList list = new NbtList(new ArrayList<>(), NbtElement.COMPOUND_TYPE);
+            NbtList list = new NbtList();
             int saved = 0;
             for (Map.Entry<UUID, SimpleInventory> entry : INVENTORIES.entrySet()) {
                 ItemStack stack = entry.getValue().getStack(0);
