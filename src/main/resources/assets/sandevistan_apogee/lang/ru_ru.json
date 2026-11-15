@@ -1,29 +1,32 @@
 {
   "item.sandevistan_apogee.sandevistan_apogee": "Сандевистан: Апогей",
-  "item.sandevistan_apogee.sandevistan_apogee.tooltip.1": "Кибернетический имплант. Держите его в любом слоте инвентаря.",
+  "item.sandevistan_apogee.sandevistan_apogee.tooltip.1": "Кибернетический имплант. Установите его в нейрослот (клавиша C).",
   "item.sandevistan_apogee.sandevistan_apogee.tooltip.2": "Нажмите клавишу активации (по умолчанию V), чтобы разогнать нервную систему.",
   "item.sandevistan_apogee.sandevistan_apogee.tooltip.3": "Побочный эффект: ближайшие мобы и снаряды еле ползут.",
   "itemGroup.sandevistan_apogee.cyberware": "Кибернетика",
-
   "key.sandevistan_apogee.activate": "Активировать Сандевистан",
   "key.sandevistan_apogee.cycle_fx": "Переключить интенсивность визуальных эффектов",
   "key.categories.sandevistan_apogee": "Сандевистан: Апогей",
-
   "subtitles.sandevistan_apogee.activate": "Сандевистан активируется",
   "subtitles.sandevistan_apogee.loop": "Сандевистан гудит",
   "subtitles.sandevistan_apogee.deactivate": "Сандевистан отключается",
   "subtitles.sandevistan_apogee.ready": "Сандевистан готов",
-
   "hud.sandevistan_apogee.active": "АКТИВЕН",
   "hud.sandevistan_apogee.cooldown": "ЗАРЯДКА",
   "hud.sandevistan_apogee.ready": "ГОТОВ [%s]",
   "hud.sandevistan_apogee.missing": "НЕТ ИМПЛАНТА",
-
-  "message.sandevistan_apogee.no_implant": "Нужен имплант «Сандевистан» в инвентаре.",
+  "message.sandevistan_apogee.no_implant": "Нужен имплант «Сандевистан». Сначала изготовите его (вкладка «Кибернетика»).",
   "message.sandevistan_apogee.cooldown": "Сандевистан перезаряжается: %s с",
   "message.sandevistan_apogee.no_server": "На этом сервере не установлен мод «Сандевистан: Апогей».",
   "message.sandevistan_apogee.fx_intensity": "Интенсивность эффектов Сандевистана: %s%%",
-
   "command.sandevistan_apogee.reloaded": "Конфиг «Сандевистан: Апогей» перезагружен.",
-  "command.sandevistan_apogee.fx_set": "Визуальная настройка обновлена: %s = %s"
+  "command.sandevistan_apogee.fx_set": "Визуальная настройка обновлена: %s = %s",
+  "key.sandevistan_apogee.open": "Открыть нейроимплант",
+  "gui.sandevistan_apogee.title": "НЕЙРОИМПЛАНТ",
+  "gui.sandevistan_apogee.installed": "ИМПЛАНТ: ОНЛАЙН",
+  "gui.sandevistan_apogee.empty": "СЛОТ ПУСТ",
+  "gui.sandevistan_apogee.inventory": "Инвентарь",
+  "gui.sandevistan_apogee.button": "Открыть нейроимплант (C)",
+  "hud.sandevistan_apogee.not_installed": "НЕ В СЛОТЕ [C]",
+  "message.sandevistan_apogee.not_installed": "Сандевистан не установлен. Нажмите C и поместите имплант в нейрослот."
 }

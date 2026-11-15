@@ -11,7 +11,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 /**
- * The implant has no use-action: it works from the inventory. The logic lives in SandevistanManager (server).
+ * The implant has no use-action: it works when installed into the dedicated neuroimplant slot.
+ * The logic lives in SandevistanManager (server), the slot in implant/ImplantManager.
  * TooltipContext is a plain data class, safe to reference on a dedicated server.
  */
 public class SandevistanItem extends Item {

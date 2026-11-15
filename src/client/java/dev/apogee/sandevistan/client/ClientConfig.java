@@ -23,6 +23,10 @@ public final class ClientConfig {
     public boolean cameraFov = true;
     public boolean screenFlash = true;
     public boolean screenOverlay = true;
+    /** Subtle full-screen tint + scanlines while the implant is active. */
+    public boolean screenTint = true;
+    /** Red, heartbeat-pulsing edge warning during the last 1.5 s of the effect. */
+    public boolean lowTime = true;
     public boolean afterimages = true;
     public boolean arcs = true;
     public boolean particles = true;

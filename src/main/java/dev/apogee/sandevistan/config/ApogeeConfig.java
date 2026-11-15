@@ -41,6 +41,11 @@ public final class ApogeeConfig {
     public boolean affectPlayers = false;
     /** Play the humming sound once per second while active. */
     public boolean playLoopSound = true;
+    /**
+     * Legacy behaviour: if true, the implant also works straight from the regular inventory.
+     * Default false — the implant must be installed into the dedicated neuroimplant slot (key C).
+     */
+    public boolean allowInventoryActivation = false;
 
     public static ApogeeConfig get() {
         return instance;

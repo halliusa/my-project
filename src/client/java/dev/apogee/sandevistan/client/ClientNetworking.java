@@ -19,6 +19,12 @@ public final class ClientNetworking {
                     client.execute(() -> ClientState.onOwnerState(kind, active, cooldown, activeTotal, cooldownTotal));
                 });
 
+        ClientPlayNetworking.registerGlobalReceiver(ApogeeNetworking.IMPLANT_SYNC,
+                (client, handler, buf, responseSender) -> {
+                    boolean installed = buf.readBoolean();
+                    client.execute(() -> ClientState.onImplantState(installed));
+                });
+
         ClientPlayNetworking.registerGlobalReceiver(ApogeeNetworking.TRAIL,
                 (client, handler, buf, responseSender) -> {
                     int kind = buf.readByte();

@@ -1,29 +1,32 @@
 {
   "item.sandevistan_apogee.sandevistan_apogee": "Sandevistan: Apogee",
-  "item.sandevistan_apogee.sandevistan_apogee.tooltip.1": "Cyberware implant. Keep it anywhere in your inventory.",
+  "item.sandevistan_apogee.sandevistan_apogee.tooltip.1": "Cyberware implant. Install it into the neuroimplant slot (key C).",
   "item.sandevistan_apogee.sandevistan_apogee.tooltip.2": "Press the activation key (default V) to overclock your nervous system.",
   "item.sandevistan_apogee.sandevistan_apogee.tooltip.3": "Side effects: nearby mobs and projectiles crawl.",
   "itemGroup.sandevistan_apogee.cyberware": "Cyberware",
-
   "key.sandevistan_apogee.activate": "Activate Sandevistan",
   "key.sandevistan_apogee.cycle_fx": "Cycle visual effects intensity",
   "key.categories.sandevistan_apogee": "Sandevistan: Apogee",
-
   "subtitles.sandevistan_apogee.activate": "Sandevistan activates",
   "subtitles.sandevistan_apogee.loop": "Sandevistan hums",
   "subtitles.sandevistan_apogee.deactivate": "Sandevistan shuts down",
   "subtitles.sandevistan_apogee.ready": "Sandevistan is ready",
-
   "hud.sandevistan_apogee.active": "ACTIVE",
   "hud.sandevistan_apogee.cooldown": "RECHARGE",
   "hud.sandevistan_apogee.ready": "READY [%s]",
   "hud.sandevistan_apogee.missing": "NO IMPLANT",
-
-  "message.sandevistan_apogee.no_implant": "You need the Sandevistan implant in your inventory.",
+  "message.sandevistan_apogee.no_implant": "You need the Sandevistan implant. Craft it first (Cyberware tab).",
   "message.sandevistan_apogee.cooldown": "Sandevistan is recharging: %s s",
   "message.sandevistan_apogee.no_server": "This server does not have Sandevistan: Apogee installed.",
   "message.sandevistan_apogee.fx_intensity": "Sandevistan effects intensity: %s%%",
-
   "command.sandevistan_apogee.reloaded": "Sandevistan: Apogee config reloaded.",
-  "command.sandevistan_apogee.fx_set": "Sandevistan visual setting updated: %s = %s"
+  "command.sandevistan_apogee.fx_set": "Sandevistan visual setting updated: %s = %s",
+  "key.sandevistan_apogee.open": "Open Neuroimplant",
+  "gui.sandevistan_apogee.title": "NEUROIMPLANT",
+  "gui.sandevistan_apogee.installed": "IMPLANT: ONLINE",
+  "gui.sandevistan_apogee.empty": "SLOT: EMPTY",
+  "gui.sandevistan_apogee.inventory": "Inventory",
+  "gui.sandevistan_apogee.button": "Open Neuroimplant (C)",
+  "hud.sandevistan_apogee.not_installed": "NOT IN SLOT [C]",
+  "message.sandevistan_apogee.not_installed": "Sandevistan is not installed. Press C and put the implant into the neuroimplant slot."
 }

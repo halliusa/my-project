@@ -3,6 +3,7 @@ package dev.apogee.sandevistan.logic;
 import dev.apogee.sandevistan.ApogeeItems;
 import dev.apogee.sandevistan.ApogeeSounds;
 import dev.apogee.sandevistan.config.ApogeeConfig;
+import dev.apogee.sandevistan.implant.ImplantManager;
 import dev.apogee.sandevistan.network.ApogeeNetworking;
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityWorldChangeEvents;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
@@ -96,7 +97,12 @@ public final class SandevistanManager {
             return;
         }
         if (!hasImplant(player)) {
-            player.sendMessage(Text.translatable("message.sandevistan_apogee.no_implant"), true);
+            if (hasImplantInInventory(player) && !ApogeeConfig.get().allowInventoryActivation) {
+                // The implant is in the inventory but was never installed into the dedicated slot.
+                player.sendMessage(Text.translatable("message.sandevistan_apogee.not_installed"), true);
+            } else {
+                player.sendMessage(Text.translatable("message.sandevistan_apogee.no_implant"), true);
+            }
             return;
         }
         ApogeeConfig cfg = ApogeeConfig.get();
@@ -333,7 +339,20 @@ public final class SandevistanManager {
 
     // ------------------------------------------------------------------ helpers
 
+    /**
+     * The implant works when it is installed into the dedicated neuroimplant slot. As a legacy convenience,
+     * the server config can additionally allow plain inventory carry-around
+     * ({@code allowInventoryActivation}, off by default).
+     */
     public static boolean hasImplant(ServerPlayerEntity player) {
+        if (ImplantManager.hasImplant(player)) {
+            return true;
+        }
+        return ApogeeConfig.get().allowInventoryActivation && hasImplantInInventory(player);
+    }
+
+    /** Plain inventory scan (kept for the HUD hint and the legacy config toggle). */
+    public static boolean hasImplantInInventory(ServerPlayerEntity player) {
         for (int i = 0; i < player.getInventory().size(); i++) {
             if (player.getInventory().getStack(i).isOf(ApogeeItems.SANDEVISTAN)) {
                 return true;

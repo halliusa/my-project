@@ -22,6 +22,9 @@ public final class ClientState {
     public static int activeTotal;
     public static int cooldownLeft;
     public static int cooldownTotal;
+    /** Whether the server says the implant is installed into the dedicated neuroimplant slot. */
+    public static boolean implantInstalled;
+
     /** Ticks of the highlighted "ready" state after the READY packet. */
     public static int readyFlash;
 
@@ -34,6 +37,7 @@ public final class ClientState {
         cooldownLeft = 0;
         cooldownTotal = 0;
         readyFlash = 0;
+        implantInstalled = false;
         remote.clear();
     }
 
@@ -57,6 +61,10 @@ public final class ClientState {
                 entry.setValue(left);
             }
         }
+    }
+
+    public static void onImplantState(boolean installed) {
+        implantInstalled = installed;
     }
 
     public static void onOwnerState(int kind, int active, int cooldown, int activeTot, int cooldownTot) {
